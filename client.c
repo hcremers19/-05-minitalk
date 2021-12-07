@@ -10,20 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <stdlib.h>
-
-int	ft_atoi(const char *str);
+#include "minitalk.h"
 
 int	main(int argc, char **argv)
 {
 	if (argc < 2)
-		printf("Error! Not enough arguments.\n");
+		ft_putstr_fd("Error! Not enough arguments.\n", 1);
 	else if (argc > 2)
-		printf("Error! Too many arguments.\n");
+		ft_putstr_fd("Error! Too many arguments.\n", 1);
 	else
+	{
 		kill(ft_atoi(argv[1]), SIGUSR1);
+		usleep(1);
+		kill(ft_atoi(argv[1]), SIGUSR2);
+	}
 	return (0);
 }

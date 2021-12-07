@@ -15,8 +15,8 @@ $(NAME)
 all:
 	gcc -Wall -Wextra -Werror -c client.c
 	gcc -Wall -Wextra -Werror -c server.c
-	gcc -o client client.o libft.a
-	gcc -o server server.o
+	gcc -o client client.o libft/libft.a ft_printf/libftprintf.a
+	gcc -o server server.o ft_printf/libftprintf.a
 
 clean:
 	rm client.o server.o
