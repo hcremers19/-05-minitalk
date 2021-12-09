@@ -12,23 +12,32 @@
 
 #include "minitalk.h"
 
-void	s1_handler(int num)
+void	handler(int num)
 {
-	(void)num;
-	ft_putstr_fd("SIGUSR1 received!\n", 1);
-}
+	static int	i = 128;
+	static int	x = 0;
 
-void	s2_handler(int num)
-{
-	(void)num;
-	ft_putstr_fd("SIGUSR2 received!\n", 1);
+	if (num == 31)
+		x = x + i;
+	i = i / 2;
+	if (!i)
+	{
+		ft_printf("%c", x);
+		i = 128;
+		x = 0;
+	}
 }
 
 int	main(void)
 {
+	int	i;
+	int	x;
+
+	i = 128;
+	x = 0;
 	ft_printf("Welcome! Here's your PID: %d\n", getpid());
-	signal(SIGUSR1, s1_handler);
-	signal(SIGUSR2, s2_handler);
+	signal(SIGUSR1, handler);
+	signal(SIGUSR2, handler);
 	while (1)
 	{
 		pause();

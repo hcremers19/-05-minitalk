@@ -14,15 +14,32 @@
 
 int	main(int argc, char **argv)
 {
-	if (argc < 2)
+	int	x;
+	int	i;
+
+	x = argv[2][0];
+	i = 128;
+	if (argc < 3)
 		ft_putstr_fd("Error! Not enough arguments.\n", 1);
-	else if (argc > 2)
+	else if (argc > 3)
 		ft_putstr_fd("Error! Too many arguments.\n", 1);
 	else
 	{
-		kill(ft_atoi(argv[1]), SIGUSR1);
-		usleep(1);
-		kill(ft_atoi(argv[1]), SIGUSR2);
+		while (i)
+		{
+			if (x / i)
+			{
+				kill(ft_atoi(argv[1]), SIGUSR2);
+				x = x - i;
+				usleep(1);
+			}
+			else
+			{
+				kill(ft_atoi(argv[1]), SIGUSR1);
+				usleep(1);
+			}
+			i = i / 2;
+		}
 	}
 	return (0);
 }
