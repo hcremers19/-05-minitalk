@@ -14,32 +14,53 @@
 
 int	main(int argc, char **argv)
 {
-	int	x;
+	int	b;
 	int	i;
 
-	x = argv[2][0];
-	i = 128;
+	i = 0;
+	b = 128;
 	if (argc < 3)
 		ft_putstr_fd("Error! Not enough arguments.\n", 1);
 	else if (argc > 3)
 		ft_putstr_fd("Error! Too many arguments.\n", 1);
 	else
 	{
-		while (i)
+		while (argv[2][i])
 		{
-			if (x / i)
+			while (b)
 			{
-				kill(ft_atoi(argv[1]), SIGUSR2);
-				x = x - i;
-				usleep(1);
+				if (argv[2][i] / b)
+				{
+					kill(ft_atoi(argv[1]), SIGUSR2);
+					argv[2][i] -= b;
+					usleep(100);
+				}
+				else
+				{
+					kill(ft_atoi(argv[1]), SIGUSR1);
+					usleep(100);
+				}
+				b = b / 2;
 			}
-			else
-			{
-				kill(ft_atoi(argv[1]), SIGUSR1);
-				usleep(1);
-			}
-			i = i / 2;
+			b = 128;
+			i++;
 		}
+		kill(ft_atoi(argv[1]), SIGUSR1);
+		usleep(100);
+		kill(ft_atoi(argv[1]), SIGUSR1);
+		usleep(100);
+		kill(ft_atoi(argv[1]), SIGUSR1);
+		usleep(100);
+		kill(ft_atoi(argv[1]), SIGUSR1);
+		usleep(100);
+		kill(ft_atoi(argv[1]), SIGUSR2);
+		usleep(100);
+		kill(ft_atoi(argv[1]), SIGUSR1);
+		usleep(100);
+		kill(ft_atoi(argv[1]), SIGUSR2);
+		usleep(100);
+		kill(ft_atoi(argv[1]), SIGUSR1);
+		usleep(100);
 	}
 	return (0);
 }
