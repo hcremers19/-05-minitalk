@@ -12,28 +12,6 @@
 
 #include "minitalk.h"
 
-void	ft_sendstr(int pid, int x)
-{
-	int	b;
-
-	b = 128;
-	while (b)
-	{
-		if (x / b)
-		{
-			kill(pid, SIGUSR2);
-			x %= b;
-			usleep(100);
-		}
-		else
-		{
-			kill(pid, SIGUSR1);
-			usleep(100);
-		}
-		b = b / 2;
-	}
-}
-
 int	errors(int err)
 {
 	if (err == 1)
@@ -43,6 +21,28 @@ int	errors(int err)
 	else if (err == 3)
 		ft_putstr_fd("Error! Invalid PID.\n", 1);
 	return (-1);
+}
+
+int	ft_sendstr(int pid, int x)
+{
+	int	b;
+
+	b = 128;
+	while (b)
+	{
+		if (x / b)
+		{
+			if (kill(pid, SIGUSR2) == -1)
+				return (-1);
+			x %= b;
+		}
+		else
+			if (kill(pid, SIGUSR1) == -1)
+				return (-1);
+		usleep(100);
+		b /= 2;
+	}
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -57,17 +57,19 @@ int	main(int argc, char **argv)
 		return (errors(2));
 	else
 	{
-		i = 0;
 		pid = ft_atoi(argv[1]);
 		if (pid < 1 || 4194304 < pid)
 			return (errors(3));
+		i = 0;
 		while (argv[2][i])
 		{
 			x = argv[2][i];
-			ft_sendstr(pid, x);
+			if (ft_sendstr(pid, x) == -1)
+				return (errors(3));
 			i++;
 		}
-		ft_sendstr(pid, '\n');
+		if (ft_sendstr(pid, '\n') == -1)
+			return (errors(3));
 	}
 	return (0);
 }
