@@ -15,31 +15,38 @@ NAME	= libutils.a
 
 SCRS	= $(wildcard *.c)
 
-OBJS	= ${SCRS:.c=.o}
+OBJDIR	= objs
+OBJS	= $(addprefix $(OBJDIR)/, $(SCRS:.c=.o))
 
 CC		= gcc
 RM		= rm -f
+MKDIR	= mkdir
+RC		= ar rcs
+MV		= mv
 
 CFLAGS	= -Wall -Wextra -Werror
 
-.c.o:
-			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+$(OBJDIR)/%.o :	%.c
+				$(CC) $(CFLAGS) -c $< -o $(addprefix $(OBJDIR)/, $(<:.c=.o))
 
-$(NAME):	${OBJS}
-			ar rcs ${NAME} ${OBJS}
-			ranlib ${NAME}
-			mkdir objs/
-			mv $(OBJS) objs/
+all:			$(NAME)
 
+$(NAME):		$(OBJS)
+				$(RC) $(NAME) $(OBJS)
+				ranlib $(NAME)
 
-all:		${NAME}
+$(OBJS):		| $(OBJDIR)
+
+$(OBJDIR):		
+				mkdir $(OBJDIR)
 
 clean:
-			${RM} -r objs/
+				$(RM) $(wildcard *.o)
+				$(RM) -r $(OBJDIR)
 
-fclean:		clean
-			${RM} ${NAME}
+fclean:			clean
+				$(RM) $(NAME)
 
-re:			fclean all
+re:				fclean all
 
-.PHONY:		all clean fclean re
+.PHONY:			all clean fclean re

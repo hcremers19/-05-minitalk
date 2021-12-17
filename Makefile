@@ -29,28 +29,26 @@ ZIP		= zip
 CFLAGS	= -Wall -Wextra -Werror
 
 .c.o:
-	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
 
 all:		$(NAME)
 
 $(NAME):	$(OBJ1) $(OBJ2)
-	make -C utils/
-	$(CC) -o $(NAME1) $(OBJ1) utils/libutils.a
-	$(CC) -o $(NAME2) $(OBJ2) utils/libutils.a
-	mkdir objs/
-	mv $(OBJ) objs/
+			make -C utils/
+			$(CC) $(CFLAGS) -o $(NAME1) $(OBJ1) utils/libutils.a
+			$(CC) $(CFLAGS) -o $(NAME2) $(OBJ2) utils/libutils.a
 
 clean:
-	make clean -C utils/
-	$(RM) -r objs/
+			make clean -C utils/
+			$(RM) $(wildcard *.o)
 
 fclean:		clean
-	make fclean -C utils/
-	$(RM) $(NAME)
+			make fclean -C utils/
+			$(RM) $(NAME)
 
 re:			fclean all
 
 zip:		fclean
-	$(ZIP) \[05\]minitalk $(wildcard ./*)
+			$(ZIP) \[05\]minitalk $(wildcard ./*)
 
 .PHONY:		all clean fclean re zip
