@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hcremers <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: hcremers <hcremers@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/04 18:08:58 by hcremers          #+#    #+#              #
-#    Updated: 2021/12/04 18:09:00 by hcremers         ###   ########.fr        #
+#    Updated: 2022/11/10 11:14:36 by hcremers         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,11 @@ OBJ		= $(OBJ1) $(OBJ2)
 OBJ1	= $(SRC1:.c=.o)
 OBJ2	= $(SRC2:.c=.o)
 
+UTILS	= utils
+LIB		= libutils.a
+
 CC		= gcc
 RM		= rm -f
-ZIP		= zip
 
 CFLAGS	= -Wall -Wextra -Werror
 
@@ -34,21 +36,18 @@ CFLAGS	= -Wall -Wextra -Werror
 all:		$(NAME)
 
 $(NAME):	$(OBJ1) $(OBJ2)
-			make -C utils/
-			$(CC) $(CFLAGS) -o $(NAME1) $(OBJ1) utils/libutils.a
-			$(CC) $(CFLAGS) -o $(NAME2) $(OBJ2) utils/libutils.a
+			make -C $(UTILS)/
+			$(CC) $(CFLAGS) -o $(NAME1) $(OBJ1) $(UTILS)/$(LIB)
+			$(CC) $(CFLAGS) -o $(NAME2) $(OBJ2) $(UTILS)/$(LIB)
 
 clean:
-			make clean -C utils/
+			make clean -C $(UTILS)/
 			$(RM) $(wildcard *.o)
 
 fclean:		clean
-			make fclean -C utils/
+			make fclean -C $(UTILS)/
 			$(RM) $(NAME)
 
 re:			fclean all
-
-zip:		fclean
-			$(ZIP) \[05\]minitalk $(wildcard ./*)
 
 .PHONY:		all clean fclean re zip
